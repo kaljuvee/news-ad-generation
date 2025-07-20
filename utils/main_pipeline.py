@@ -114,7 +114,8 @@ def main():
         return
     
     # Save parsed data
-    with open('parsed_client_data.json', 'w') as f:
+    os.makedirs('data', exist_ok=True)
+    with open('data/parsed_client_data.json', 'w') as f:
         json.dump(parsed_data, f, indent=2)
     
     print(f"  📊 Parsed data for {len(parsed_data)} clients")
@@ -140,7 +141,7 @@ def main():
             print(f"    ⚠️  Failed to scrape content")
     
     # Save data with content
-    with open('client_data_with_content.json', 'w', encoding='utf-8') as f:
+    with open('data/client_data_with_content.json', 'w', encoding='utf-8') as f:
         json.dump(parsed_data, f, indent=2, ensure_ascii=False)
     
     print(f"  📊 Successfully scraped {scraped_count}/{len(parsed_data)} landing pages")
@@ -150,7 +151,7 @@ def main():
     rag_result, success = run_step(
         "STEP 3: Building RAG vector database and processing",
         process_client_data_with_rag,
-        'client_data_with_content.json'
+        'data/client_data_with_content.json'
     )
     
     if not success:
@@ -168,7 +169,7 @@ def main():
     campaigns, success = run_step(
         "STEP 4: Generating AI-powered ad campaigns",
         generate_complete_campaign,
-        'processed_client_data_rag.json'
+        'data/processed_client_data_rag.json'
     )
     
     if not success:
@@ -195,10 +196,10 @@ def main():
         files = [
             ('parsed_client_data.json', 'Parsed Excel data'),
             ('client_data_with_content.json', 'Data with scraped content'),
-            ('processed_client_data_rag.json', 'RAG-processed data'),
-            ('generated_ad_campaigns.json', 'Final ad campaigns'),
-            ('vector_index.faiss', 'Vector database index'),
-            ('vector_metadata.pkl', 'Vector database metadata')
+            ('data/processed_client_data_rag.json', 'RAG-processed data'),
+            ('generated_ads_text/generated_ad_campaigns.json', 'Final ad campaigns'),
+            ('data/vector_index.faiss', 'Vector database index'),
+            ('data/vector_metadata.pkl', 'Vector database metadata')
         ]
         
         for filename, description in files:

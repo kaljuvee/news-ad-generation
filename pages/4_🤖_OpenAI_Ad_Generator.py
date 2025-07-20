@@ -69,39 +69,68 @@ except Exception as e:
     st.error(f"❌ Error loading processed data: {str(e)}")
     st.stop()
 
-# OpenAI Configuration
-st.header("⚙️ OpenAI Configuration")
-
-# API Key input
-api_key = st.text_input(
-    "OpenAI API Key",
-    type="password",
-    help="Enter your OpenAI API key. You can also set it in the .env file."
-)
-
-# Check for .env file
-if os.path.exists(".env"):
-    st.info("✅ Found .env file. API key can be loaded from there.")
-else:
-    st.warning("⚠️ No .env file found. Create one with your OpenAI API key.")
-
-# Model configuration
-col1, col2 = st.columns(2)
-
-with col1:
+# Sidebar Configuration
+with st.sidebar:
+    st.header("⚙️ OpenAI Configuration")
+    
+    # API Key input in sidebar
+    api_key = st.text_input(
+        "OpenAI API Key",
+        type="password",
+        help="Enter your OpenAI API key to generate ads",
+        placeholder="sk-..."
+    )
+    
+    if not api_key:
+        st.warning("⚠️ Please enter your OpenAI API key to generate ads.")
+        st.info("💡 Get your API key from: https://platform.openai.com/api-keys")
+    
+    st.divider()
+    
+    # Model configuration in sidebar
+    st.subheader("🤖 Model Settings")
+    
     text_model = st.selectbox(
         "Text Model",
         ["gpt-4o", "gpt-4-turbo", "gpt-3.5-turbo"],
         help="OpenAI model for text generation"
     )
     
-    temperature = st.slider("Temperature", 0.0, 1.0, 0.7, 0.1)
-
-with col2:
-    max_tokens = st.slider("Max Tokens", 1000, 8000, 4000, 500)
+    temperature = st.slider("Temperature", 0.0, 1.0, 0.7, 0.1, help="Higher = more creative, Lower = more focused")
+    
+    max_tokens = st.slider("Max Tokens", 1000, 8000, 4000, 500, help="Maximum length of generated text")
+    
     use_rag = st.checkbox("Use RAG Integration", value=True, help="Use vector database for enhanced context")
+    
+    st.divider()
+    
+    # Quick info
+    st.subheader("ℹ️ About")
+    st.markdown("""
+    **This step generates AI-powered ad campaigns:**
+    - Uses GPT-4o for creative text generation
+    - Integrates with RAG system for context
+    - Creates multiple ad formats per client
+    - Connects client expertise with news themes
+    """)
+    
+    st.divider()
+    
+    # API usage info
+    st.subheader("💰 API Usage")
+    st.markdown("""
+    **Estimated costs per client:**
+    - GPT-4o: ~$0.01-0.03 per campaign
+    - 3 ad formats per client
+    - Includes RAG context enhancement
+    
+    **Tips:**
+    - Start with 1-2 clients to test
+    - Monitor usage in OpenAI dashboard
+    - Use temperature 0.7 for best results
+    """)
 
-# Client Selection
+# Main content area
 st.header("🎯 Client Selection")
 client_names = list(processed_data.keys())
 selected_clients = st.multiselect(
@@ -115,13 +144,13 @@ selected_clients = st.multiselect(
 if st.button("🚀 Generate Ad Campaigns", type="primary"):
     if not selected_clients:
         st.warning("⚠️ Please select at least one client.")
-    elif not api_key and not os.path.exists(".env"):
-        st.warning("⚠️ Please provide an OpenAI API key.")
+    elif not api_key:
+        st.warning("⚠️ Please enter your OpenAI API key in the sidebar.")
     else:
         with st.spinner("Generating ad campaigns..."):
             try:
-                # Initialize OpenAI ad generator
-                generator = OpenAIAdGenerator(api_key=api_key if api_key else None)
+                # Initialize OpenAI ad generator with API key from sidebar
+                generator = OpenAIAdGenerator(api_key=api_key)
                 
                 # Load RAG processor if requested
                 if use_rag:
@@ -248,10 +277,10 @@ if selected_clients:
     individual_client = st.selectbox("Select client for individual generation:", selected_clients)
     
     if st.button("🎯 Generate for Selected Client", type="secondary"):
-        if individual_client and (api_key or os.path.exists(".env")):
+        if individual_client and api_key:
             with st.spinner(f"Generating ads for {individual_client}..."):
                 try:
-                    generator = OpenAIAdGenerator(api_key=api_key if api_key else None)
+                    generator = OpenAIAdGenerator(api_key=api_key)
                     
                     if use_rag:
                         generator.load_rag_processor()
@@ -268,7 +297,7 @@ if selected_clients:
                 except Exception as e:
                     st.error(f"❌ Error generating campaign: {str(e)}")
         else:
-            st.warning("⚠️ Please select a client and provide API key.")
+            st.warning("⚠️ Please select a client and enter your OpenAI API key in the sidebar.")
 
 # Instructions
 with st.expander("ℹ️ Instructions"):

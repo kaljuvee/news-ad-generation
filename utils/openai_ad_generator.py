@@ -288,7 +288,7 @@ Landing Page URL: {client_data.get('url', '')}
         
         return campaign
 
-def generate_complete_campaign(processed_data_file: str = 'processed_client_data_rag.json') -> List[Dict[str, Any]]:
+def generate_complete_campaign(processed_data_file: str = 'data/processed_client_data_rag.json') -> List[Dict[str, Any]]:
     """
     Generate complete ad campaigns for all clients
     
@@ -338,11 +338,12 @@ if __name__ == "__main__":
     campaigns = generate_complete_campaign()
     
     # Save campaigns
-    with open('generated_ad_campaigns.json', 'w', encoding='utf-8') as f:
+    os.makedirs("generated_ads_text", exist_ok=True)
+    with open('generated_ads_text/generated_ad_campaigns.json', 'w', encoding='utf-8') as f:
         json.dump(campaigns, f, indent=2, ensure_ascii=False)
     
     print(f"\n✅ Generated {len(campaigns)} ad campaigns")
-    print("📁 Campaigns saved to generated_ad_campaigns.json")
+    print("📁 Campaigns saved to generated_ads_text/generated_ad_campaigns.json")
     
     # Print summary
     print(f"\n=== CAMPAIGN SUMMARY ===")

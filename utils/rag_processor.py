@@ -272,18 +272,21 @@ class RAGProcessor:
     
     def _save_index(self):
         """Save FAISS index and metadata"""
-        faiss.write_index(self.index, "vector_index.faiss")
-        with open("vector_metadata.pkl", "wb") as f:
+        # Ensure data directory exists
+        os.makedirs("data", exist_ok=True)
+        
+        faiss.write_index(self.index, "data/vector_index.faiss")
+        with open("data/vector_metadata.pkl", "wb") as f:
             pickle.dump(self.metadata, f)
-        print("Vector database saved to disk")
+        print("Vector database saved to data/ directory")
     
     def load_index(self):
         """Load FAISS index and metadata from disk"""
-        if os.path.exists("vector_index.faiss") and os.path.exists("vector_metadata.pkl"):
-            self.index = faiss.read_index("vector_index.faiss")
-            with open("vector_metadata.pkl", "rb") as f:
+        if os.path.exists("data/vector_index.faiss") and os.path.exists("data/vector_metadata.pkl"):
+            self.index = faiss.read_index("data/vector_index.faiss")
+            with open("data/vector_metadata.pkl", "rb") as f:
                 self.metadata = pickle.load(f)
-            print("Vector database loaded from disk")
+            print("Vector database loaded from data/ directory")
             return True
         return False
 
@@ -342,10 +345,11 @@ if __name__ == "__main__":
     result = process_client_data_with_rag()
     
     # Save processed data
-    with open('processed_client_data_rag.json', 'w', encoding='utf-8') as f:
+    os.makedirs("data", exist_ok=True)
+    with open('data/processed_client_data_rag.json', 'w', encoding='utf-8') as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
     
-    print(f"\nProcessed data saved to processed_client_data_rag.json")
+    print(f"\nProcessed data saved to data/processed_client_data_rag.json")
     print(f"Vector database and metadata saved for future use")
     
     # Print summary
