@@ -1,0 +1,14 @@
+pandas
+openpyxl
+requests
+beautifulsoup4
+sentence-transformers
+rake-nltk
+nltk
+faiss-cpu
+openai
+scikit-learn
+python-dotenv
+streamlit
+Pillow
+numpy 
