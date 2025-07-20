@@ -136,6 +136,49 @@ if st.button("🚀 Build Vector Database", type="primary"):
 st.header("🔍 Semantic Search")
 st.markdown("Test semantic search functionality:")
 
+# Example queries section
+with st.expander("💡 Example Search Queries", expanded=False):
+    st.markdown("""
+    **Try these example queries to test the semantic search:**
+    
+    **🎯 Client-Specific Queries:**
+    - Example 1: `"PIMCO investment strategies and portfolio management"`
+    - Example 2: `"State Street institutional services and custody solutions"`
+    - Example 3: `"T. Rowe Price mutual funds and retirement planning"`
+    
+    **📈 Market & Investment Themes:**
+    - Example 4: `"market volatility and risk management strategies"`
+    - Example 5: `"ESG investing and sustainable finance trends"`
+    - Example 6: `"fixed income markets and bond yields"`
+    - Example 7: `"emerging markets and global investment opportunities"`
+    
+    **🏦 Financial Services:**
+    - Example 8: `"institutional asset management and pension funds"`
+    - Example 9: `"wealth management and financial planning services"`
+    - Example 10: `"custody services and securities lending"`
+    
+    **📊 Economic & Regulatory:**
+    - Example 11: `"Federal Reserve policy and interest rates"`
+    - Example 12: `"financial regulations and compliance requirements"`
+    - Example 13: `"inflation and economic outlook"`
+    
+    **💼 Business & Technology:**
+    - Example 14: `"digital transformation in financial services"`
+    - Example 15: `"fintech innovation and blockchain technology"`
+    - Example 16: `"cybersecurity and data protection in finance"`
+    
+    **🌍 Global Markets:**
+    - Example 17: `"European markets and Brexit implications"`
+    - Example 18: `"Asian markets and China economic growth"`
+    - Example 19: `"emerging market currencies and volatility"`
+    
+    **💡 Tips for Better Results:**
+    - Use specific terms related to the financial industry
+    - Include both broad concepts and specific keywords
+    - Try different content type filters (All, landing_page, news_article)
+    - Experiment with different numbers of results
+    """)
+
 # Search options
 col1, col2 = st.columns(2)
 
